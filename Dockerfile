@@ -15,10 +15,10 @@ RUN apt-get update && apt-get install -y \
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Copier les fichiers de l'application
-COPY . /var/www/html
+COPY . /var/www/public
 
 # Définir le répertoire de travail
-WORKDIR /var/www/html
+WORKDIR /var/www/public
 
 # Copier la configuration Nginx
 COPY ./conf/nginx/nginx-site.conf /etc/nginx/conf.d/default.conf
