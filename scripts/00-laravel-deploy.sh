@@ -1,28 +1,34 @@
 #!/usr/bin/env bash
-set -e
+set -eo pipefail
 
-echo "Exécution de composer"
-if ! composer install --no-dev --optimize-autoloader --working-dir=/var/www/html; then
-    echo "Échec de l'installation des dépendances Composer"
-    exit 1
-fi
+APP_DIR="/var/www" # Correction du chemin selon votre structure Docker
 
-echo "Mise en cache de la configuration..."
-if ! php artisan config:cache; then
-    echo "Échec de la mise en cache de la configuration"
-    exit 1
-fi
+echo "→ Installation des dépendances Composer (production)"
+composer install \
+    --no-interaction \
+    --no-dev \
+    --prefer-dist \
+    --optimize-autoloader \
+    --working-dir="$APP_DIR" \
+    --no-scripts # Désactive temporairement les scripts post-install
 
-echo "Mise en cache des routes..."
-if ! php artisan route:cache; then
-    echo "Échec de la mise en cache des routes"
-    exit 1
-fi
+echo "→ Configuration des permissions"
+chmod -R 775 "${APP_DIR}/storage" "${APP_DIR}/bootstrap/cache"
+chown -R www-data:www-data "${APP_DIR}/storage"
 
-echo "Exécution des migrations..."
-if ! php artisan migrate --force; then
-    echo "Échec de l'exécution des migrations"
-    exit 1
-fi
+echo "→ Génération de la clé d'application"
+php artisan key:generate --force
 
-echo "Déploiement terminé avec succès."
+echo "→ Mise en place du lien de stockage"
+php artisan storage:link --force
+
+echo "→ Optimisation de l'application"
+php artisan config:cache && php artisan route:cache && php artisan view:cache
+
+echo "→ Exécution des migrations de base de données"
+php artisan migrate --force --no-interaction
+
+echo "→ Réactivation des scripts Composer"
+composer run-script post-autoload-dump --working-dir="$APP_DIR"
+
+echo "✅ Déploiement terminé avec succès"
