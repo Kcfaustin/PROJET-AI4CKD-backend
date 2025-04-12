@@ -1,22 +1,30 @@
-FROM richarvey/nginx-php-fpm:1.7.2
+FROM php:8.1-fpm
 
-COPY . .
+# Installer les dépendances nécessaires
+RUN apt-get update && apt-get install -y \
+    nginx \
+    git \
+    unzip \
+    curl \
+    libpq-dev \
+    libzip-dev \
+    zip \
+    && docker-php-ext-install pdo pdo_pgsql zip
 
-# Configuration de l'image
-ENV SKIP_COMPOSER 1
-ENV WEBROOT /var/www/html/public
-ENV PHP_ERRORS_STDERR 1
-ENV RUN_SCRIPTS 1
-ENV REAL_IP_HEADER 1
+# Installer Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Configuration de Laravel
-ENV APP_ENV=production
-ENV APP_DEBUG=false
-ENV LOG_CHANNEL=stderr
+# Copier les fichiers de l'application
+COPY . /var/www/html
 
+# Définir le répertoire de travail
+WORKDIR /var/www/html
 
+# Copier la configuration Nginx
+COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
 
-# Autoriser composer à s'exécuter en tant que superutilisateur
-ENV COMPOSER_ALLOW_SUPERUSER 1
+# Exposer le port 80
+EXPOSE 80
 
-CMD ["/start.sh"]
+# Démarrer PHP-FPM et Nginx
+CMD service nginx start && php-fpm
