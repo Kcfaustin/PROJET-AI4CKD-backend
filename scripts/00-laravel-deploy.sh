@@ -2,8 +2,8 @@
 echo "Exécution de composer"
 composer install --no-dev --working-dir=/var/www/html
 
-echo "Génération de la clé d'application..."
-php artisan key:generate --show
+#echo "Génération de la clé d'application..."
+#php artisan key:generate --show
 
 echo "Mise en cache de la configuration..."
 php artisan config:cache
