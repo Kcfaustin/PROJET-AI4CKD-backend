@@ -1,5 +1,6 @@
 # Utilisez une image officielle PHP-FPM avec Alpine (plus légère)
-FROM php:8.2-fpm-alpine
+# Remplacez la première ligne par
+FROM us-west1-docker.pkg.dev/render-prod/docker-mirror/php:8.2-fpm-alpine
 
 # Installer les dépendances système nécessaires
 RUN apk update && apk add --no-cache \
