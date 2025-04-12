@@ -11,3 +11,6 @@ yarn-error.log
 .env
 .git
 .gitignore
+# .dockerignore
+!storage/
+!bootstrap/cache/
