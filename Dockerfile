@@ -1,44 +1,31 @@
-# Utilisez une image officielle PHP-FPM avec Alpine (plus légère)
 FROM php:8.2-fpm
 
-# Installer les dépendances système nécessaires
-RUN apk update && apk add --no-cache \
+# Installer les dépendances nécessaires
+RUN apt-get update && apt-get install -y \
     nginx \
-    supervisor \
-    postgresql-dev \
-    zip \
-    unzip \
     git \
-    curl
+    unzip \
+    curl \
+    libpq-dev \
+    libzip-dev \
+    zip \
+    && docker-php-ext-install pdo pdo_pgsql zip
 
-# Installer les extensions PHP nécessaires
-RUN docker-php-ext-install pdo pdo_pgsql
+# Installer Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Créer la structure de répertoires correcte
-RUN mkdir -p /var/www/html /run/nginx
-
-# Copier TOUTE l'application dans /var/www (pas dans public!)
+# Copier les fichiers de l'application
 COPY . /var/www
 
-# Définir le répertoire de travail correct
+# Définir le répertoire de travail
 WORKDIR /var/www
-
-# Installer Composer et les dépendances
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
-    && composer install --no-dev --optimize-autoloader
-
-# Configurer les permissions
-RUN chown -R www-data:www-data /var/www/storage \
-    && chmod -R 775 storage bootstrap/cache
 
 # Copier la configuration Nginx
 COPY ./conf/nginx/nginx-site.conf /etc/nginx/conf.d/default.conf
 
-# Copier le fichier de configuration PHP
-COPY ./conf/php/php.ini /usr/local/etc/php/conf.d/app.ini
 
-# Exposer le port 80 pour Nginx
+# Exposer le port 80
 EXPOSE 80
 
-# Commande de démarrage optimisée
-CMD sh -c "php-fpm && nginx -g 'daemon off;'"
+# Démarrer PHP-FPM et Nginx
+CMD service nginx start && php-fpm
