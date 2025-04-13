@@ -28,7 +28,7 @@ COPY . /var/www/html
 WORKDIR /var/www/html
 
 # Copier la configuration Nginx
-COPY ./conf/nginx/nginx-site.conf /etc/nginx/conf.d/default.conf
+#COPY ./conf/nginx/nginx-site.conf /etc/nginx/conf.d/default.conf
 
 # Exposer le port 80
 EXPOSE 80
