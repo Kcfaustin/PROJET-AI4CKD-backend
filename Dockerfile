@@ -12,14 +12,16 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install pdo pdo_pgsql zip
 
 
+
+
+# Installer Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
 # Installation des dépendances PHP via Composer
 RUN composer install --no-dev --optimize-autoloader
 
 # Définir les permissions appropriées
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-
-# Installer Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Copier les fichiers de l'application
 COPY . /var/www/html
