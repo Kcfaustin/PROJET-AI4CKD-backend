@@ -2858,3 +2858,81 @@ Stack trace:
 [stacktrace]
 #0 {main}
 "} 
+[2025-04-13 14:55:00] production.ERROR: Uncaught InvalidArgumentException: Please provide a valid cache path. in E:\xampp\htdocs\Projet Personnel\IFRI\HACKATON\backend\vendor\laravel\framework\src\Illuminate\View\Compilers\Compiler.php:66
+Stack trace:
+#0 E:\xampp\htdocs\Projet Personnel\IFRI\HACKATON\backend\vendor\laravel\framework\src\Illuminate\View\ViewServiceProvider.php(97): Illuminate\View\Compilers\Compiler->__construct(Object(Illuminate\Filesystem\Filesystem), false, '', true, 'php')
+#1 E:\xampp\htdocs\Projet Personnel\IFRI\HACKATON\backend\vendor\laravel\framework\src\Illuminate\Container\Container.php(1010): Illuminate\View\ViewServiceProvider->Illuminate\View\{closure}(Object(Illuminate\Foundation\Application), Array)
+#2 E:\xampp\htdocs\Projet Personnel\IFRI\HACKATON\backend\vendor\laravel\framework\src\Illuminate\Container\Container.php(890): Illuminate\Container\Container->build(Object(Closure))
+#3 E:\xampp\htdocs\Projet Personnel\IFRI\HACKATON\backend\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(1077): Illuminate\Container\Container->resolve('blade.compiler', Array, true)
+#4 E:\xampp\htdocs\Projet Personnel\IFRI\HACKATON\backend\vendor\laravel\framework\src\Illuminate\Container\Container.php(821): Illuminate\Foundation\Application->resolve('blade.compiler', Array)
+#5 E:\xampp\htdocs\Projet Personnel\IFRI\HACKATON\backend\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(1057): Illuminate\Container\Container->make('blade.compiler', Array)
+#6 E:\xampp\htdocs\Projet Personnel\IFRI\HACKATON\backend\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php(124): Illuminate\Foundation\Application->make('blade.compiler', Array)
+#7 Command line code(1): app('Illuminate\\View...')
+#8 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Uncaught InvalidArgumentException: Please provide a valid cache path. in E:\\xampp\\htdocs\\Projet Personnel\\IFRI\\HACKATON\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Compilers\\Compiler.php:66
+Stack trace:
+#0 E:\\xampp\\htdocs\\Projet Personnel\\IFRI\\HACKATON\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\View\\ViewServiceProvider.php(97): Illuminate\\View\\Compilers\\Compiler->__construct(Object(Illuminate\\Filesystem\\Filesystem), false, '', true, 'php')
+#1 E:\\xampp\\htdocs\\Projet Personnel\\IFRI\\HACKATON\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(1010): Illuminate\\View\\ViewServiceProvider->Illuminate\\View\\{closure}(Object(Illuminate\\Foundation\\Application), Array)
+#2 E:\\xampp\\htdocs\\Projet Personnel\\IFRI\\HACKATON\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(890): Illuminate\\Container\\Container->build(Object(Closure))
+#3 E:\\xampp\\htdocs\\Projet Personnel\\IFRI\\HACKATON\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1077): Illuminate\\Container\\Container->resolve('blade.compiler', Array, true)
+#4 E:\\xampp\\htdocs\\Projet Personnel\\IFRI\\HACKATON\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(821): Illuminate\\Foundation\\Application->resolve('blade.compiler', Array)
+#5 E:\\xampp\\htdocs\\Projet Personnel\\IFRI\\HACKATON\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1057): Illuminate\\Container\\Container->make('blade.compiler', Array)
+#6 E:\\xampp\\htdocs\\Projet Personnel\\IFRI\\HACKATON\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\helpers.php(124): Illuminate\\Foundation\\Application->make('blade.compiler', Array)
+#7 Command line code(1): app('Illuminate\\\\View...')
+#8 {main}
+  thrown at E:\\xampp\\htdocs\\Projet Personnel\\IFRI\\HACKATON\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Compilers\\Compiler.php:66)
+[stacktrace]
+#0 {main}
+"} 
+[2025-04-13 15:05:00] production.ERROR: Uncaught InvalidArgumentException: Please provide a valid cache path. in E:\xampp\htdocs\Projet Personnel\IFRI\HACKATON\backend\vendor\laravel\framework\src\Illuminate\View\Compilers\Compiler.php:66
+Stack trace:
+#0 E:\xampp\htdocs\Projet Personnel\IFRI\HACKATON\backend\vendor\laravel\framework\src\Illuminate\View\ViewServiceProvider.php(97): Illuminate\View\Compilers\Compiler->__construct(Object(Illuminate\Filesystem\Filesystem), false, '', true, 'php')
+#1 E:\xampp\htdocs\Projet Personnel\IFRI\HACKATON\backend\vendor\laravel\framework\src\Illuminate\Container\Container.php(1010): Illuminate\View\ViewServiceProvider->Illuminate\View\{closure}(Object(Illuminate\Foundation\Application), Array)
+#2 E:\xampp\htdocs\Projet Personnel\IFRI\HACKATON\backend\vendor\laravel\framework\src\Illuminate\Container\Container.php(890): Illuminate\Container\Container->build(Object(Closure))
+#3 E:\xampp\htdocs\Projet Personnel\IFRI\HACKATON\backend\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(1077): Illuminate\Container\Container->resolve('blade.compiler', Array, true)
+#4 E:\xampp\htdocs\Projet Personnel\IFRI\HACKATON\backend\vendor\laravel\framework\src\Illuminate\Container\Container.php(821): Illuminate\Foundation\Application->resolve('blade.compiler', Array)
+#5 E:\xampp\htdocs\Projet Personnel\IFRI\HACKATON\backend\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(1057): Illuminate\Container\Container->make('blade.compiler', Array)
+#6 E:\xampp\htdocs\Projet Personnel\IFRI\HACKATON\backend\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php(124): Illuminate\Foundation\Application->make('blade.compiler', Array)
+#7 Command line code(1): app('Illuminate\\View...')
+#8 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Uncaught InvalidArgumentException: Please provide a valid cache path. in E:\\xampp\\htdocs\\Projet Personnel\\IFRI\\HACKATON\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Compilers\\Compiler.php:66
+Stack trace:
+#0 E:\\xampp\\htdocs\\Projet Personnel\\IFRI\\HACKATON\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\View\\ViewServiceProvider.php(97): Illuminate\\View\\Compilers\\Compiler->__construct(Object(Illuminate\\Filesystem\\Filesystem), false, '', true, 'php')
+#1 E:\\xampp\\htdocs\\Projet Personnel\\IFRI\\HACKATON\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(1010): Illuminate\\View\\ViewServiceProvider->Illuminate\\View\\{closure}(Object(Illuminate\\Foundation\\Application), Array)
+#2 E:\\xampp\\htdocs\\Projet Personnel\\IFRI\\HACKATON\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(890): Illuminate\\Container\\Container->build(Object(Closure))
+#3 E:\\xampp\\htdocs\\Projet Personnel\\IFRI\\HACKATON\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1077): Illuminate\\Container\\Container->resolve('blade.compiler', Array, true)
+#4 E:\\xampp\\htdocs\\Projet Personnel\\IFRI\\HACKATON\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(821): Illuminate\\Foundation\\Application->resolve('blade.compiler', Array)
+#5 E:\\xampp\\htdocs\\Projet Personnel\\IFRI\\HACKATON\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1057): Illuminate\\Container\\Container->make('blade.compiler', Array)
+#6 E:\\xampp\\htdocs\\Projet Personnel\\IFRI\\HACKATON\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\helpers.php(124): Illuminate\\Foundation\\Application->make('blade.compiler', Array)
+#7 Command line code(1): app('Illuminate\\\\View...')
+#8 {main}
+  thrown at E:\\xampp\\htdocs\\Projet Personnel\\IFRI\\HACKATON\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Compilers\\Compiler.php:66)
+[stacktrace]
+#0 {main}
+"} 
+[2025-04-13 15:15:00] production.ERROR: Uncaught InvalidArgumentException: Please provide a valid cache path. in E:\xampp\htdocs\Projet Personnel\IFRI\HACKATON\backend\vendor\laravel\framework\src\Illuminate\View\Compilers\Compiler.php:66
+Stack trace:
+#0 E:\xampp\htdocs\Projet Personnel\IFRI\HACKATON\backend\vendor\laravel\framework\src\Illuminate\View\ViewServiceProvider.php(97): Illuminate\View\Compilers\Compiler->__construct(Object(Illuminate\Filesystem\Filesystem), false, '', true, 'php')
+#1 E:\xampp\htdocs\Projet Personnel\IFRI\HACKATON\backend\vendor\laravel\framework\src\Illuminate\Container\Container.php(1010): Illuminate\View\ViewServiceProvider->Illuminate\View\{closure}(Object(Illuminate\Foundation\Application), Array)
+#2 E:\xampp\htdocs\Projet Personnel\IFRI\HACKATON\backend\vendor\laravel\framework\src\Illuminate\Container\Container.php(890): Illuminate\Container\Container->build(Object(Closure))
+#3 E:\xampp\htdocs\Projet Personnel\IFRI\HACKATON\backend\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(1077): Illuminate\Container\Container->resolve('blade.compiler', Array, true)
+#4 E:\xampp\htdocs\Projet Personnel\IFRI\HACKATON\backend\vendor\laravel\framework\src\Illuminate\Container\Container.php(821): Illuminate\Foundation\Application->resolve('blade.compiler', Array)
+#5 E:\xampp\htdocs\Projet Personnel\IFRI\HACKATON\backend\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(1057): Illuminate\Container\Container->make('blade.compiler', Array)
+#6 E:\xampp\htdocs\Projet Personnel\IFRI\HACKATON\backend\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php(124): Illuminate\Foundation\Application->make('blade.compiler', Array)
+#7 Command line code(1): app('Illuminate\\View...')
+#8 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Uncaught InvalidArgumentException: Please provide a valid cache path. in E:\\xampp\\htdocs\\Projet Personnel\\IFRI\\HACKATON\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Compilers\\Compiler.php:66
+Stack trace:
+#0 E:\\xampp\\htdocs\\Projet Personnel\\IFRI\\HACKATON\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\View\\ViewServiceProvider.php(97): Illuminate\\View\\Compilers\\Compiler->__construct(Object(Illuminate\\Filesystem\\Filesystem), false, '', true, 'php')
+#1 E:\\xampp\\htdocs\\Projet Personnel\\IFRI\\HACKATON\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(1010): Illuminate\\View\\ViewServiceProvider->Illuminate\\View\\{closure}(Object(Illuminate\\Foundation\\Application), Array)
+#2 E:\\xampp\\htdocs\\Projet Personnel\\IFRI\\HACKATON\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(890): Illuminate\\Container\\Container->build(Object(Closure))
+#3 E:\\xampp\\htdocs\\Projet Personnel\\IFRI\\HACKATON\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1077): Illuminate\\Container\\Container->resolve('blade.compiler', Array, true)
+#4 E:\\xampp\\htdocs\\Projet Personnel\\IFRI\\HACKATON\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(821): Illuminate\\Foundation\\Application->resolve('blade.compiler', Array)
+#5 E:\\xampp\\htdocs\\Projet Personnel\\IFRI\\HACKATON\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1057): Illuminate\\Container\\Container->make('blade.compiler', Array)
+#6 E:\\xampp\\htdocs\\Projet Personnel\\IFRI\\HACKATON\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\helpers.php(124): Illuminate\\Foundation\\Application->make('blade.compiler', Array)
+#7 Command line code(1): app('Illuminate\\\\View...')
+#8 {main}
+  thrown at E:\\xampp\\htdocs\\Projet Personnel\\IFRI\\HACKATON\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Compilers\\Compiler.php:66)
+[stacktrace]
+#0 {main}
+"} 
