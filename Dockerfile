@@ -14,8 +14,15 @@ RUN apt-get update && apt-get install -y \
 
 
 
+
 # Installer Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Définir le répertoire de travail
+WORKDIR /var/www/html
+
+# Copier les fichiers de l'application dans l'image
+COPY . .
 
 # Installation des dépendances PHP via Composer
 
@@ -23,12 +30,6 @@ RUN composer install --no-dev --optimize-autoloader --no-scripts --verbose
 
 # Définir les permissions appropriées
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-
-# Copier les fichiers de l'application
-COPY . /var/www/html
-
-# Définir le répertoire de travail
-WORKDIR /var/www/html
 
 # Copier la configuration Nginx
 COPY ./conf/nginx/nginx-site.conf /etc/nginx/conf.d/default.conf
