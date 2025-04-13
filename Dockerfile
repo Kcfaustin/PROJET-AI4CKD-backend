@@ -18,10 +18,11 @@ RUN apt-get update && apt-get install -y \
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Installation des dépendances PHP via Composer
-RUN composer install --no-dev --optimize-autoloader
+
+RUN composer install --no-dev --optimize-autoloader --no-scripts --verbose
 
 # Définir les permissions appropriées
-#RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Copier les fichiers de l'application
 COPY . /var/www/html
