@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-APP_DIR="/opt/render/project/src"  # Correction du chemin selon votre structure Docker
+APP_DIR="/var/www/html"  # Correction du chemin selon votre structure Docker
 
 echo "→ Installation des dépendances Composer (production)"
 composer install \

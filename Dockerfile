@@ -1,5 +1,12 @@
 FROM php:8.1-fpm
 
+# Définir le répertoire de travail
+WORKDIR /var/www/html
+
+# Copier les fichiers de l'application
+COPY . .
+
+
 # Installer les dépendances nécessaires
 RUN apt-get update && apt-get install -y \
     nginx \
