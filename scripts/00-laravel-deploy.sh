@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-APP_DIR="/var/www" # Correction du chemin selon votre structure Docker
+APP_DIR="/opt/render/project/src"  # Correction du chemin selon votre structure Docker
 
 echo "→ Installation des dépendances Composer (production)"
 composer install \
@@ -17,16 +17,18 @@ chmod -R 775 "${APP_DIR}/storage" "${APP_DIR}/bootstrap/cache"
 chown -R www-data:www-data "${APP_DIR}/storage"
 
 echo "→ Génération de la clé d'application"
-php artisan key:generate --force
+php "$APP_DIR/artisan" key:generate
 
 echo "→ Mise en place du lien de stockage"
-php artisan storage:link --force
+php "$APP_DIR/artisan" storage:link --force
 
 echo "→ Optimisation de l'application"
-php artisan config:cache && php artisan route:cache && php artisan view:cache
+php "$APP_DIR/artisan" config:cache
+php "$APP_DIR/artisan" route:cache
+php "$APP_DIR/artisan" view:cache
 
 echo "→ Exécution des migrations de base de données"
-php artisan migrate --force --no-interaction
+php "$APP_DIR/artisan" migrate --force --no-interaction
 
 echo "→ Réactivation des scripts Composer"
 composer run-script post-autoload-dump --working-dir="$APP_DIR"
