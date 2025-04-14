@@ -29,6 +29,9 @@ php "$APP_DIR/artisan" storage:link --force
 echo "Exécution des migrations"
 php artisan migrate --force
 
+echo "Exécution des seeders"
+php artisan db:seed
+
 echo "→ Réactivation des scripts Composer"
 composer run-script post-autoload-dump --working-dir="$APP_DIR"
 
