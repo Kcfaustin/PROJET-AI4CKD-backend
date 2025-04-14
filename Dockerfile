@@ -41,12 +41,6 @@ COPY ./conf/nginx/nginx-site.conf /etc/nginx/conf.d/default.conf
 # Exposer le port 80
 EXPOSE 80
 
-# echo "Exécution des migrations"
-RUN php artisan migrate --force
-
-# echo "Exécution des seeders"
-RUN php artisan db:seed --force
-
 # Donner les permissions d'exécution au script de déploiement
 RUN chmod +x scripts/00-laravel-deploy.sh
 
