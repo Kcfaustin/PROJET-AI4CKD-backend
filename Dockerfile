@@ -39,7 +39,7 @@ COPY ./conf/nginx/nginx-site.conf /etc/nginx/conf.d/default.conf
 
 
 # Exposer le port 80
-EXPOSE 9000
+EXPOSE 80
 
 # Démarrer PHP-FPM et Nginx
 CMD service nginx start && php-fpm
