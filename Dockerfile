@@ -44,9 +44,8 @@ EXPOSE 80
 # Donner les permissions d'exécution au script de déploiement
 RUN chmod +x scripts/00-laravel-deploy.sh
 
-# Exécuter le script de déploiement
-CMD ["sh", "scripts/00-laravel-deploy.sh"]
 
-# Démarrer PHP-FPM et Nginx
-CMD service nginx start && php-fpm
+# Démarrer PHP-FPM et Nginx et le script de déploiement
+CMD sh -c "scripts/00-laravel-deploy.sh && service nginx start && php-fpm"
+
 
