@@ -41,6 +41,12 @@ COPY ./conf/nginx/nginx-site.conf /etc/nginx/conf.d/default.conf
 # Exposer le port 80
 EXPOSE 80
 
+# Donner les permissions d'exécution au script de déploiement
+RUN chmod +x scripts/00-laravel-deploy.sh
+
+# Exécuter le script de déploiement
+CMD ["sh", "scripts/00-laravel-deploy.sh"]
+
 # Démarrer PHP-FPM et Nginx
 CMD service nginx start && php-fpm
 
