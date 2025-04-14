@@ -30,7 +30,7 @@ echo "Exécution des migrations"
 php artisan migrate --force
 
 echo "Exécution des seeders"
-php artisan db:seed
+php artisan db:seed --force
 
 echo "→ Réactivation des scripts Composer"
 composer run-script post-autoload-dump --working-dir="$APP_DIR"
