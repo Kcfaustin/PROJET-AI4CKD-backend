@@ -4,6 +4,12 @@
 /public/hot
 /public/storage
 /storage/*.key
+storage/*
+!storage/.gitignore
+!storage/api-docs/
+storage/api-docs/*
+!storage/api-docs/.gitignore
+!storage/api-docs/api-docs.json
 /storage/pail
 /vendor
 .env
