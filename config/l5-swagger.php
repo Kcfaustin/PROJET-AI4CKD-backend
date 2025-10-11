@@ -5,12 +5,11 @@ return [
     'documentations' => [
         'default' => [
             'api' => [
-                'title' => 'API Documentation',
+                'title' => 'API Gestion Médicale',
             ],
 
             'routes' => [
                 'api' => 'api/documentation',
-                'docs' => 'docs', // IMPORTANT: Ajout de cette ligne
             ],
 
             'paths' => [

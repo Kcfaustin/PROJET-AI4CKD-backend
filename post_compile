@@ -1,3 +1,4 @@
+cat > post_compile << 'EOF'
 #!/usr/bin/env bash
 
 echo "-----> Creating storage directories"
@@ -9,3 +10,4 @@ echo "-----> Generating Swagger documentation"
 php artisan l5-swagger:generate
 
 echo "-----> Swagger setup complete"
+EOF
