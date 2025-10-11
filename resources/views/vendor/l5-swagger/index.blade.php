@@ -126,7 +126,7 @@
         const urls = [];
 
         @foreach($urlsToDocs as $title => $url)
-            urls.push({name: "{{ $title }}", url: "{{ $url }}"});
+            urls.push({name: "{{ $title }}", url: "/docs/api-docs.json"});
         @endforeach
 
         // Build a system
