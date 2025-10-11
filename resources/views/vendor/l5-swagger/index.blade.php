@@ -126,7 +126,9 @@
         const urls = [];
 
         @foreach($urlsToDocs as $title => $url)
-            urls.push({name: "{{ $title }}", url: "/docs/api-docs.json"});
+            // Utiliser la query string au lieu du paramètre de route
+            let correctedUrl = "{{ route('l5-swagger.default.docs') }}?jsonFile={{ config('l5-swagger.documentations.default.paths.docs_json', 'api-docs.json') }}";
+            urls.push({name: "{{ $title }}", url: correctedUrl});
         @endforeach
 
         // Build a system
