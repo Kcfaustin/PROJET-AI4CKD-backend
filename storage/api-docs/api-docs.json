@@ -7,7 +7,7 @@
     },
     "servers": [
         {
-            "url": "https://hackathonbackend-73ba5772822d.herokuapp.com/api",
+            "url": "https://hackathonbackend-73ba5772822d.herokuapp.com",
             "description": "Serveur de production"
         }
     ],

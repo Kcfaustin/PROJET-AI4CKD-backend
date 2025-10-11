@@ -9,7 +9,7 @@ namespace App\Http\Controllers;
  *     description="Documentation de l'API de gestion médicale"
  * )
  * @OA\Server(
- *     url="https://hackathonbackend-73ba5772822d.herokuapp.com/api",
+ *     url="https://hackathonbackend-73ba5772822d.herokuapp.com",
  *     description="Serveur de production"
  * )
  * @OA\SecurityScheme(
