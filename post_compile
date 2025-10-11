@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+echo "-----> Creating storage directories"
+mkdir -p storage/api-docs
+mkdir -p storage/framework/{sessions,views,cache}
+chmod -R 775 storage
+
+echo "-----> Generating Swagger documentation"
+php artisan l5-swagger:generate
+
+echo "-----> Swagger setup complete"
