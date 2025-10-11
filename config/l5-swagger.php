@@ -21,6 +21,11 @@ return [
                 'use_absolute_path' => env('L5_SWAGGER_USE_ABSOLUTE_PATH', true),
 
                 /*
+                * Forcer HTTPS pour tous les assets
+                */
+                'force_https' => env('L5_SWAGGER_FORCE_HTTPS', true),
+
+                /*
                 * Edit to set path where swagger ui assets should be stored
                 */
                 'swagger_ui_assets_path' => env('L5_SWAGGER_UI_ASSETS_PATH', 'vendor/swagger-api/swagger-ui/dist/'),
@@ -312,7 +317,7 @@ return [
          * Constants which can be used in annotations
          */
         'constants' => [
-            'L5_SWAGGER_CONST_HOST' => env('L5_SWAGGER_CONST_HOST', 'http://my-default-host.com'),
+            'L5_SWAGGER_CONST_HOST' => env('L5_SWAGGER_CONST_HOST', 'http://localhost:8000/api'),
         ],
     ],
 ];
