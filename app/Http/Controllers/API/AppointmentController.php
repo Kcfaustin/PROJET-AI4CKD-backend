@@ -12,13 +12,85 @@ use Illuminate\Http\JsonResponse;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @OA\Tag(
+ *     name="Rendez-vous",
+ *     description="Gestion des rendez-vous médicaux"
+ * )
+ */
 class AppointmentController extends Controller
 {
     /**
-     * Affiche la liste des rendez-vous.
-     *
-     * @param Request $request
-     * @return JsonResponse
+     * @OA\Get(
+     *     path="/api/appointments",
+     *     tags={"Rendez-vous"},
+     *     summary="Liste des rendez-vous",
+     *     description="Retourne la liste des rendez-vous avec filtres optionnels",
+     *     @OA\Parameter(
+     *         name="doctor_id",
+     *         in="query",
+     *         description="Filtrer par ID du médecin",
+     *         required=false,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Parameter(
+     *         name="status",
+     *         in="query",
+     *         description="Filtrer par statut",
+     *         required=false,
+     *         @OA\Schema(type="string", enum={"Planifié", "Confirmé", "Annulé", "Terminé"})
+     *     ),
+     *     @OA\Parameter(
+     *         name="type",
+     *         in="query",
+     *         description="Filtrer par type de consultation",
+     *         required=false,
+     *         @OA\Schema(type="string", example="Consultation")
+     *     ),
+     *     @OA\Parameter(
+     *         name="date",
+     *         in="query",
+     *         description="Filtrer par date (format: YYYY-MM-DD)",
+     *         required=false,
+     *         @OA\Schema(type="string", format="date", example="2025-10-15")
+     *     ),
+     *     @OA\Parameter(
+     *         name="search",
+     *         in="query",
+     *         description="Rechercher par nom de patient ou médecin",
+     *         required=false,
+     *         @OA\Schema(type="string", example="Jean")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Liste des rendez-vous récupérée avec succès",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     @OA\Property(property="id", type="integer", example=1),
+     *                     @OA\Property(property="patientName", type="string", example="Jean Dupont"),
+     *                     @OA\Property(property="patientId", type="integer", example=5),
+     *                     @OA\Property(property="date", type="string", example="15/10/2025"),
+     *                     @OA\Property(property="time", type="string", example="14:30"),
+     *                     @OA\Property(property="duration", type="string", example="30 min"),
+     *                     @OA\Property(property="type", type="string", example="Consultation"),
+     *                     @OA\Property(property="doctor", type="string", example="Dr. Marie Martin"),
+     *                     @OA\Property(property="status", type="string", example="Confirmé"),
+     *                     @OA\Property(property="notes", type="string", example="Premier rendez-vous"),
+     *                     @OA\Property(
+     *                         property="patient",
+     *                         type="object",
+     *                         @OA\Property(property="phone", type="string", example="+229123456789"),
+     *                         @OA\Property(property="status", type="string", example="actif")
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     )
+     * )
      */
     public function index(Request $request): JsonResponse
     {
@@ -104,10 +176,62 @@ class AppointmentController extends Controller
     }
 
     /**
-     * Enregistre un nouveau rendez-vous.
-     *
-     * @param Request $request
-     * @return JsonResponse
+     * @OA\Post(
+     *     path="/api/appointments",
+     *     tags={"Rendez-vous"},
+     *     summary="Créer un nouveau rendez-vous",
+     *     description="Enregistre un nouveau rendez-vous médical",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"patient_id", "user_id", "date", "time", "duration", "type", "status"},
+     *             @OA\Property(property="patient_id", type="integer", description="ID du patient", example=5),
+     *             @OA\Property(property="user_id", type="integer", description="ID du médecin", example=2),
+     *             @OA\Property(property="date", type="string", description="Date du rendez-vous (format: dd/mm/yyyy)", example="15/10/2025"),
+     *             @OA\Property(property="time", type="string", description="Heure du rendez-vous (format: HH:mm)", example="14:30"),
+     *             @OA\Property(property="duration", type="string", description="Durée du rendez-vous", example="30 min"),
+     *             @OA\Property(property="type", type="string", description="Type de consultation", example="Consultation"),
+     *             @OA\Property(property="status", type="string", enum={"Planifié", "Confirmé", "Annulé", "Terminé"}, example="Planifié"),
+     *             @OA\Property(property="notes", type="string", description="Notes additionnelles", example="Premier rendez-vous")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Rendez-vous créé avec succès",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Rendez-vous créé avec succès"),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="patientName", type="string", example="Jean Dupont"),
+     *                 @OA\Property(property="patientId", type="integer", example=5),
+     *                 @OA\Property(property="date", type="string", example="15/10/2025"),
+     *                 @OA\Property(property="time", type="string", example="14:30"),
+     *                 @OA\Property(property="duration", type="string", example="30 min"),
+     *                 @OA\Property(property="type", type="string", example="Consultation"),
+     *                 @OA\Property(property="doctor", type="string", example="Dr. Marie Martin"),
+     *                 @OA\Property(property="status", type="string", example="Planifié"),
+     *                 @OA\Property(property="notes", type="string", example="Premier rendez-vous"),
+     *                 @OA\Property(
+     *                     property="patient",
+     *                     type="object",
+     *                     @OA\Property(property="phone", type="string", example="+229123456789"),
+     *                     @OA\Property(property="status", type="string", example="actif")
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Erreur de validation ou conflit d'horaire",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Le médecin a déjà un rendez-vous à cette heure.")
+     *         )
+     *     )
+     * )
      */
     public function store(Request $request): JsonResponse
     {
@@ -169,11 +293,54 @@ class AppointmentController extends Controller
         ], 201);
     }
 
-    /**
-     * Affiche les détails d’un rendez-vous spécifique.
-     *
-     * @param int $id
-     * @return JsonResponse
+   /**
+     * @OA\Get(
+     *     path="/api/appointments/{id}",
+     *     tags={"Rendez-vous"},
+     *     summary="Détails d'un rendez-vous",
+     *     description="Retourne les informations détaillées d'un rendez-vous spécifique",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID du rendez-vous",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Détails du rendez-vous récupérés avec succès",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="patientName", type="string", example="Jean Dupont"),
+     *                 @OA\Property(property="patientId", type="integer", example=5),
+     *                 @OA\Property(property="date", type="string", example="15/10/2025"),
+     *                 @OA\Property(property="time", type="string", example="14:30"),
+     *                 @OA\Property(property="duration", type="string", example="30 min"),
+     *                 @OA\Property(property="type", type="string", example="Consultation"),
+     *                 @OA\Property(property="doctor", type="string", example="Dr. Marie Martin"),
+     *                 @OA\Property(property="status", type="string", example="Confirmé"),
+     *                 @OA\Property(property="notes", type="string", example="Premier rendez-vous"),
+     *                 @OA\Property(
+     *                     property="patient",
+     *                     type="object",
+     *                     @OA\Property(property="phone", type="string", example="+229123456789"),
+     *                     @OA\Property(property="status", type="string", example="actif")
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Rendez-vous non trouvé",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="No query results for model [App\\Models\\Appointment] 1")
+     *         )
+     *     )
+     * )
      */
     public function show(int $id): JsonResponse
     {
@@ -201,11 +368,61 @@ class AppointmentController extends Controller
     }
 
     /**
-     * Met à jour les informations d’un rendez-vous.
-     *
-     * @param Request $request
-     * @param int $id
-     * @return JsonResponse
+     * @OA\Put(
+     *     path="/api/appointments/{id}",
+     *     tags={"Rendez-vous"},
+     *     summary="Mettre à jour un rendez-vous",
+     *     description="Met à jour les informations d'un rendez-vous existant",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID du rendez-vous",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\RequestBody(
+     *         required=false,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="patient_id", type="integer", example=5),
+     *             @OA\Property(property="user_id", type="integer", example=2),
+     *             @OA\Property(property="date", type="string", description="Format: dd/mm/yyyy", example="15/10/2025"),
+     *             @OA\Property(property="time", type="string", description="Format: HH:mm", example="14:30"),
+     *             @OA\Property(property="duration", type="string", example="30 min"),
+     *             @OA\Property(property="type", type="string", example="Consultation"),
+     *             @OA\Property(property="status", type="string", enum={"Planifié", "Confirmé", "Annulé", "Terminé"}, example="Confirmé"),
+     *             @OA\Property(property="notes", type="string", example="Notes mises à jour")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Rendez-vous mis à jour avec succès",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Rendez-vous mis à jour avec succès"),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="patientName", type="string", example="Jean Dupont"),
+     *                 @OA\Property(property="patientId", type="integer", example=5),
+     *                 @OA\Property(property="date", type="string", example="15/10/2025"),
+     *                 @OA\Property(property="time", type="string", example="14:30"),
+     *                 @OA\Property(property="duration", type="string", example="30 min"),
+     *                 @OA\Property(property="type", type="string", example="Consultation"),
+     *                 @OA\Property(property="doctor", type="string", example="Dr. Marie Martin"),
+     *                 @OA\Property(property="status", type="string", example="Confirmé")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Rendez-vous non trouvé"
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Erreur de validation ou conflit d'horaire"
+     *     )
+     * )
      */
     public function update(Request $request, int $id): JsonResponse
     {
@@ -279,10 +496,31 @@ class AppointmentController extends Controller
     }
 
     /**
-     * Supprime un rendez-vous.
-     *
-     * @param int $id
-     * @return JsonResponse
+     * @OA\Delete(
+     *     path="/api/appointments/{id}",
+     *     tags={"Rendez-vous"},
+     *     summary="Supprimer un rendez-vous",
+     *     description="Supprime un rendez-vous de la base de données",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID du rendez-vous",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Rendez-vous supprimé avec succès",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Rendez-vous supprimé avec succès")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Rendez-vous non trouvé"
+     *     )
+     * )
      */
     public function destroy(int $id): JsonResponse
     {
@@ -296,9 +534,29 @@ class AppointmentController extends Controller
     }
 
     /**
-     * Retourne les statistiques des rendez-vous.
-     *
-     * @return JsonResponse
+     * @OA\Get(
+     *     path="/api/appointments/statistics",
+     *     tags={"Rendez-vous"},
+     *     summary="Statistiques des rendez-vous",
+     *     description="Retourne des statistiques globales sur les rendez-vous",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Statistiques récupérées avec succès",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(property="total_appointments", type="integer", description="Nombre total de rendez-vous", example=150),
+     *                 @OA\Property(property="planned_appointments", type="integer", description="Rendez-vous planifiés", example=30),
+     *                 @OA\Property(property="confirmed_appointments", type="integer", description="Rendez-vous confirmés", example=50),
+     *                 @OA\Property(property="canceled_appointments", type="integer", description="Rendez-vous annulés", example=20),
+     *                 @OA\Property(property="completed_appointments", type="integer", description="Rendez-vous terminés", example=50),
+     *                 @OA\Property(property="completion_rate", type="number", format="float", description="Taux de complétion en pourcentage", example=33.33)
+     *             )
+     *         )
+     *     )
+     * )
      */
     public function statistics(): JsonResponse
     {
