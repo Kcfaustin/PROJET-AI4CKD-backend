@@ -21,6 +21,12 @@ Pré-requis
    - DB_CONNECTION (pgsql ou mysql) et les variables DB_* fournies par l'addon Heroku Postgres
    - MAIL_* si utilisé
    - SESSION_DRIVER=database
+   
+   Variables pour Swagger (IMPORTANT pour la documentation API) :
+   heroku config:set L5_SWAGGER_GENERATE_ALWAYS=true
+   heroku config:set L5_SWAGGER_USE_ABSOLUTE_PATH=true
+   heroku config:set L5_SWAGGER_FORCE_HTTPS=false
+   heroku config:set L5_SWAGGER_CONST_HOST=https://your-app-name.herokuapp.com/api
 
 4) (Optionnel) Ajouter Heroku Postgres :
    heroku addons:create heroku-postgresql:hobby-dev
