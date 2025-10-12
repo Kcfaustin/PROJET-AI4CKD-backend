@@ -27,6 +27,7 @@ Pré-requis
    heroku config:set L5_SWAGGER_USE_ABSOLUTE_PATH=true
    heroku config:set L5_SWAGGER_FORCE_HTTPS=false
    heroku config:set L5_SWAGGER_CONST_HOST=https://your-app-name.herokuapp.com/api
+   heroku config:set L5_SWAGGER_UI_ASSETS_PATH=vendor/swagger-api/swagger-ui/dist/
 
 4) (Optionnel) Ajouter Heroku Postgres :
    heroku addons:create heroku-postgresql:hobby-dev

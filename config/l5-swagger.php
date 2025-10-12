@@ -10,7 +10,7 @@ return [
 
             'routes' => [
                 'api' => 'api/documentation',
-                'docs' => 'docs', // Enlevez le {jsonFile?} ici
+                'docs' => 'docs',
             ],
 
             'paths' => [

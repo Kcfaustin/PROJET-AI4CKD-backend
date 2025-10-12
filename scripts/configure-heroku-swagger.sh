@@ -23,6 +23,7 @@ heroku config:set \
     L5_SWAGGER_USE_ABSOLUTE_PATH=true \
     L5_SWAGGER_FORCE_HTTPS=false \
     L5_SWAGGER_CONST_HOST="${APP_URL}/api" \
+    L5_SWAGGER_UI_ASSETS_PATH="vendor/swagger-api/swagger-ui/dist/" \
     --app "$APP_NAME"
 
 if [ $? -eq 0 ]; then

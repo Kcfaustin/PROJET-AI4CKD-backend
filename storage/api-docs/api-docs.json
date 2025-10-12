@@ -7,7 +7,7 @@
     },
     "servers": [
         {
-            "url": "https://hackathonbackend-73ba5772822d.herokuapp.com",
+            "url": "http://127.0.0.1:8000//api",
             "description": "Serveur de production"
         }
     ],

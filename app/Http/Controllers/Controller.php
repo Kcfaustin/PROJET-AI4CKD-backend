@@ -9,7 +9,7 @@ namespace App\Http\Controllers;
  *     description="Documentation de l'API de gestion médicale"
  * )
  * @OA\Server(
- *     url="https://hackathonbackend-73ba5772822d.herokuapp.com",
+ *     url=L5_SWAGGER_CONST_HOST,
  *     description="Serveur de production"
  * )
  * @OA\SecurityScheme(

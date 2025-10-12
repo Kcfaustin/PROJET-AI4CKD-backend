@@ -11,20 +11,32 @@ Le fichier `api-docs.json` n'était pas généré lors du déploiement sur Herok
 ### 1. Correction du fichier `post_compile`
 Le fichier contenait une erreur de syntaxe qui empêchait l'exécution des commandes. Il a été corrigé pour exécuter directement les commandes nécessaires.
 
-### 2. Configuration des Variables d'Environnement
-Les variables suivantes doivent être configurées sur Heroku :
+### 2. Correction de la configuration `l5-swagger.php`
+La route `docs` doit inclure le paramètre `{jsonFile?}` pour permettre l'accès au fichier JSON :
+```php
+'routes' => [
+    'api' => 'api/documentation',
+    'docs' => 'docs/{jsonFile?}',  // IMPORTANT: Ne pas oublier {jsonFile?}
+],
+```
+
+### 3. Configuration des Variables d'Environnement
+Les variables suivantes **DOIVENT ABSOLUMENT** être configurées sur Heroku :
 
 ```bash
 heroku config:set L5_SWAGGER_GENERATE_ALWAYS=true --app hackathonbackend-73ba5772822d
 heroku config:set L5_SWAGGER_USE_ABSOLUTE_PATH=true --app hackathonbackend-73ba5772822d
 heroku config:set L5_SWAGGER_FORCE_HTTPS=false --app hackathonbackend-73ba5772822d
 heroku config:set L5_SWAGGER_CONST_HOST=https://hackathonbackend-73ba5772822d.herokuapp.com/api --app hackathonbackend-73ba5772822d
+heroku config:set L5_SWAGGER_UI_ASSETS_PATH=vendor/swagger-api/swagger-ui/dist/ --app hackathonbackend-73ba5772822d
 ```
 
 **OU** utilisez le script automatique :
 ```bash
 bash scripts/configure-heroku-swagger.sh hackathonbackend-73ba5772822d
 ```
+
+⚠️ **IMPORTANT** : Sans ces variables d'environnement sur Heroku, la documentation ne fonctionnera pas !
 
 ### 3. Redéploiement
 Après avoir configuré les variables d'environnement, redéployez l'application :

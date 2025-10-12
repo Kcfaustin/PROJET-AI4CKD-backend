@@ -126,9 +126,7 @@
         const urls = [];
 
         <?php $__currentLoopData = $urlsToDocs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $title => $url): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            // Utiliser la query string au lieu du paramètre de route
-            let correctedUrl = "<?php echo e(route('l5-swagger.default.docs')); ?>?jsonFile=<?php echo e(config('l5-swagger.documentations.default.paths.docs_json', 'api-docs.json')); ?>";
-            urls.push({name: "<?php echo e($title); ?>", url: correctedUrl});
+            urls.push({name: "<?php echo e($title); ?>", url: "<?php echo $url; ?>"});
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
         // Build a system
