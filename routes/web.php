@@ -72,24 +72,17 @@ Route::get('/docs/api-docs.json', function () {
 });
 
 // Route pour gérer le format de requête avec paramètre de requête (comme généré par L5-Swagger)
-Route::get('/docs', function (Illuminate\Http\Request $request) {
-    $jsonFile = $request->query('api-docs.json');
+Route::get('/docs/swagger-json', function (Illuminate\Http\Request $request) {
+    $filePath = storage_path('api-docs/api-docs.json');
     
-    if ($jsonFile !== null) {
-        $filePath = storage_path('api-docs/api-docs.json');
-        
-        if (!file_exists($filePath)) {
-            return response()->json(['error' => 'API documentation not found'], 404);
-        }
-        
-        return response()->file($filePath, [
-            'Content-Type' => 'application/json',
-            'Access-Control-Allow-Origin' => '*',
-            'Access-Control-Allow-Methods' => 'GET',
-            'Access-Control-Allow-Headers' => 'Content-Type',
-        ]);
+    if (!file_exists($filePath)) {
+        return response()->json(['error' => 'API documentation not found'], 404);
     }
     
-    // Si pas de paramètre, rediriger vers la documentation Swagger
-    return redirect('/api/documentation');
+    return response()->file($filePath, [
+        'Content-Type' => 'application/json',
+        'Access-Control-Allow-Origin' => '*',
+        'Access-Control-Allow-Methods' => 'GET',
+        'Access-Control-Allow-Headers' => 'Content-Type',
+    ]);
 });
