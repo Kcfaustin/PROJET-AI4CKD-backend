@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 Route::get('/', function () {
     $docUrl = url('/api/documentation');
@@ -52,4 +53,20 @@ Route::get('/', function () {
         </body>
     </html>
     ", 200)->header('Content-Type', 'text/html');
+});
+
+// Route pour servir le fichier JSON de la documentation Swagger
+Route::get('/docs/api-docs.json', function () {
+    $filePath = storage_path('api-docs/api-docs.json');
+    
+    if (!file_exists($filePath)) {
+        return response()->json(['error' => 'API documentation not found'], 404);
+    }
+    
+    return response()->file($filePath, [
+        'Content-Type' => 'application/json',
+        'Access-Control-Allow-Origin' => '*',
+        'Access-Control-Allow-Methods' => 'GET',
+        'Access-Control-Allow-Headers' => 'Content-Type',
+    ]);
 });
