@@ -20,6 +20,12 @@ jobs:
         extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, dom, filter, gd, json
         coverage: none
 
+    - name: Create Laravel directories
+      run: |
+        mkdir -p storage/framework/{sessions,views,cache,testing}
+        mkdir -p storage/logs
+        mkdir -p bootstrap/cache
+
     - name: Cache Composer dependencies
       uses: actions/cache@v3
       with:
@@ -29,7 +35,13 @@ jobs:
           ${{ runner.os }}-composer-
 
     - name: Install Composer dependencies
-      run: composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
+      run: composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-scripts
+
+    - name: Run manual post-install scripts
+      run: |
+        php artisan storage:link --ansi || true
+        php -r "file_exists('storage/api-docs') || mkdir('storage/api-docs', 0755, true);" || true
+        php artisan l5-swagger:generate || true
 
     - name: Validate Laravel configuration
       run: |
@@ -44,30 +56,35 @@ jobs:
     - name: Validate required secrets
       run: |
         : "Checking required secrets for PRODUCTION"
-        if [ -z "${{ secrets.SSH_PRIVATE_KEY }}" ]; then echo "Missing secret: SSH_PRIVATE_KEY"; exit 1; fi
-        if [ -z "${{ secrets.SSH_HOST }}" ]; then echo "Missing secret: SSH_HOST"; exit 1; fi
-        if [ -z "${{ secrets.SSH_USER }}" ]; then echo "Missing secret: SSH_USER"; exit 1; fi
-        if [ -z "${{ secrets.SSH_PORT }}" ]; then echo "Missing secret: SSH_PORT"; exit 1; fi
+        if [ -z "${{ secrets.SSH_PRIVATE_KEY_DEV }}" ]; then echo "Missing secret: SSH_PRIVATE_KEY_DEV"; exit 1; fi
+        if [ -z "${{ secrets.SSH_HOST_DEV }}" ]; then echo "Missing secret: SSH_HOST_DEV"; exit 1; fi
+        if [ -z "${{ secrets.SSH_USER_DEV }}" ]; then echo "Missing secret: SSH_USER_DEV"; exit 1; fi
+        if [ -z "${{ secrets.SSH_PORT_DEV }}" ]; then echo "Missing secret: SSH_PORT_DEV"; exit 1; fi
 
     - name: Deploy to Hostinger (PRODUCTION) via SSH
       uses: easingthemes/ssh-deploy@main
       with:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        REMOTE_HOST: ${{ secrets.SSH_HOST }}
-        REMOTE_USER: ${{ secrets.SSH_USER }}
-        REMOTE_PORT: ${{ secrets.SSH_PORT }}
-        TARGET: /home/${{ secrets.SSH_USER }}/domains/nephrosuiviapi.faustinagh.me
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_DEV }}
+        REMOTE_HOST: ${{ secrets.SSH_HOST_DEV }}
+        REMOTE_USER: ${{ secrets.SSH_USER_DEV }}
+        REMOTE_PORT: ${{ secrets.SSH_PORT_DEV }}
+        TARGET: /home/${{ secrets.SSH_USER_DEV }}/domains/nephrosuiviapi.faustinagh.me
         EXCLUDE: ".git, .github, node_modules, tests, .env, .env.example, storage/logs/, .phpunit.result.cache, phpunit.xml, README.md"
 
     - name: Run post-deployment commands (PRODUCTION)
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: ${{ secrets.SSH_PORT }}
+        host: ${{ secrets.SSH_HOST_DEV }}
+        username: ${{ secrets.SSH_USER_DEV }}
+        key: ${{ secrets.SSH_PRIVATE_KEY_DEV }}
+        port: ${{ secrets.SSH_PORT_DEV }}
         script: |
-          cd /home/${{ secrets.SSH_USER }}/domains/nephrosuiviapi.faustinagh.me
+          cd /home/${{ secrets.SSH_USER_DEV }}/domains/nephrosuiviapi.faustinagh.me
+
+          # Create necessary directories
+          mkdir -p storage/framework/{sessions,views,cache,testing}
+          mkdir -p storage/logs
+          mkdir -p bootstrap/cache
 
           # Clear all caches
           php artisan config:clear
@@ -75,14 +92,21 @@ jobs:
           php artisan view:clear
           php artisan cache:clear
 
-          # Rebuild optimized caches
+          # Rebuild optimized caches (without view cache on first run)
           php artisan config:cache
           php artisan route:cache
-          php artisan view:cache
-          php artisan optimize
+
+          # Try view cache separately with error handling
+          php artisan view:cache || echo "View cache skipped"
+
+          # Run optimize without view cache if needed
+          php artisan optimize || php artisan optimize --no-view-cache
 
           # Storage link
-          php artisan storage:link
+          php artisan storage:link || echo "Storage link already exists"
+
+          # L5 Swagger
+          php artisan l5-swagger:generate || echo "Swagger generation skipped"
 
           # Set proper permissions
           chmod -R 775 storage bootstrap/cache
@@ -92,17 +116,19 @@ jobs:
     - name: Verify deployment
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: ${{ secrets.SSH_PORT }}
+        host: ${{ secrets.SSH_HOST_DEV }}
+        username: ${{ secrets.SSH_USER_DEV }}
+        key: ${{ secrets.SSH_PRIVATE_KEY_DEV }}
+        port: ${{ secrets.SSH_PORT_DEV }}
         script: |
-          cd /home/${{ secrets.SSH_USER }}/domains/nephrosuiviapi.faustinagh.me
+          cd /home/${{ secrets.SSH_USER_DEV }}/domains/nephrosuiviapi.faustinagh.me
           echo "📊 Deployment verification:"
           echo "- Laravel version: $(php artisan --version)"
           echo "- PHP version: $(php -v | head -n 1)"
           echo "- Directory: $(pwd)"
           echo "- Last commit: $(git log -1 --oneline 2>/dev/null || echo 'No git info')"
+          echo "- Storage directories:"
+          ls -la storage/framework/ || echo "Storage framework not found"
 
     - name: Deployment notification
       if: always()
@@ -114,4 +140,3 @@ jobs:
           echo "❌ PRODUCTION deployment failed!"
           echo "⚠️  Check the logs and restore from backup if needed"
         fi
-
