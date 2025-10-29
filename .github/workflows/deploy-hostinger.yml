@@ -1,0 +1,117 @@
+name: Nephrosuivi - PRODUCTION Deployment
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, dom, filter, gd, json
+        coverage: none
+
+    - name: Cache Composer dependencies
+      uses: actions/cache@v3
+      with:
+        path: vendor
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-composer-
+
+    - name: Install Composer dependencies
+      run: composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
+
+    - name: Validate Laravel configuration
+      run: |
+        php artisan config:clear
+        php artisan route:clear
+        php artisan view:clear
+
+    - name: Set permissions
+      run: |
+        chmod -R 775 storage bootstrap/cache
+
+    - name: Validate required secrets
+      run: |
+        : "Checking required secrets for PRODUCTION"
+        if [ -z "${{ secrets.SSH_PRIVATE_KEY }}" ]; then echo "Missing secret: SSH_PRIVATE_KEY"; exit 1; fi
+        if [ -z "${{ secrets.SSH_HOST }}" ]; then echo "Missing secret: SSH_HOST"; exit 1; fi
+        if [ -z "${{ secrets.SSH_USER }}" ]; then echo "Missing secret: SSH_USER"; exit 1; fi
+        if [ -z "${{ secrets.SSH_PORT }}" ]; then echo "Missing secret: SSH_PORT"; exit 1; fi
+
+    - name: Deploy to Hostinger (PRODUCTION) via SSH
+      uses: easingthemes/ssh-deploy@main
+      with:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        REMOTE_HOST: ${{ secrets.SSH_HOST }}
+        REMOTE_USER: ${{ secrets.SSH_USER }}
+        REMOTE_PORT: ${{ secrets.SSH_PORT }}
+        TARGET: /home/${{ secrets.SSH_USER }}/domains/nephrosuiviapi.faustinagh.me
+        EXCLUDE: ".git, .github, node_modules, tests, .env, .env.example, storage/logs/, .phpunit.result.cache, phpunit.xml, README.md"
+
+    - name: Run post-deployment commands (PRODUCTION)
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        script: |
+          cd /home/${{ secrets.SSH_USER }}/domains/nephrosuiviapi.faustinagh.me
+
+          # Clear all caches
+          php artisan config:clear
+          php artisan route:clear
+          php artisan view:clear
+          php artisan cache:clear
+
+          # Rebuild optimized caches
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
+          php artisan optimize
+
+          # Storage link
+          php artisan storage:link
+
+          # Set proper permissions
+          chmod -R 775 storage bootstrap/cache
+
+          echo "✅ PRODUCTION deployment completed successfully!"
+
+    - name: Verify deployment
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        script: |
+          cd /home/${{ secrets.SSH_USER }}/domains/nephrosuiviapi.faustinagh.me
+          echo "📊 Deployment verification:"
+          echo "- Laravel version: $(php artisan --version)"
+          echo "- PHP version: $(php -v | head -n 1)"
+          echo "- Directory: $(pwd)"
+          echo "- Last commit: $(git log -1 --oneline 2>/dev/null || echo 'No git info')"
+
+    - name: Deployment notification
+      if: always()
+      run: |
+        if [ "${{ job.status }}" == "success" ]; then
+          echo "🎉 PRODUCTION deployment successful!"
+          echo "✅ Website: https://nephrosuiviapi.faustinagh.me/"
+        else
+          echo "❌ PRODUCTION deployment failed!"
+          echo "⚠️  Check the logs and restore from backup if needed"
+        fi
+

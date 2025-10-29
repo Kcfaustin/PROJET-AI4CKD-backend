@@ -9,6 +9,10 @@
         {
             "url": "https://hackathonbackend-73ba5772822d.herokuapp.com/api",
             "description": "API Server"
+        },
+        {
+            "url": "https://hackatonbackend.infinityfreeapp.com/api",
+            "description": "Production Server - InfinityFree"
         }
     ],
     "paths": {
