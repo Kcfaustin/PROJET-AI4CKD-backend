@@ -1,4 +1,4 @@
-name: Nephrosuivi -  PRODUCTION Deployment
+name: Nephrosuivi - PRODUCTION Deployment
 
 on:
   push:
@@ -104,6 +104,10 @@ jobs:
 
           # Storage link
           php artisan storage:link || echo "Storage link already exists"
+
+          # Create symbolic link for Hostinger public_html
+          rm -rf public_html
+          ln -s public public_html
 
           # L5 Swagger
           php artisan l5-swagger:generate || echo "Swagger generation skipped"
